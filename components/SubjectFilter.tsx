@@ -10,32 +10,43 @@ import {
 } from "./ui/select";
 import { subjects } from "@/constants";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { formUrlQuery } from "@jsmastery/utils";
+import { formUrlQuery, removeKeysFromUrlQuery } from "@jsmastery/utils";
 
 const SubjectFilter = () => {
-  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const query = searchParams.get("topic") || "";
+  const query = searchParams.get("subject") || "";
 
-  const [selectedQuery, setselectedQuery] = useState("");
-  const handleSelectChange = (value: string) => {
-    setselectedQuery(value);
-      console.log(1)
-      const newUrl = formUrlQuery({
+  const [subject, setSubject] = useState(query);
+
+  useEffect(() => {
+    let newUrl = "";
+    if(subject === 'all') {
+      newUrl = removeKeysFromUrlQuery({
         params: searchParams.toString(),
-        key: "subject",
-        value: value,
-      });
-      router.push(newUrl, { scroll: false });
-  };
+        keysToRemove: ['subject']
+      })
+    } else {
+      newUrl = formUrlQuery({
+        params: searchParams.toString(),
+        key: 'subject',
+        value: subject
+      })
+    }
+    router.push(newUrl, {scroll: false})
+  
+
+  }, [subject])
+  
+
 
   return (
-    <Select onValueChange={handleSelectChange} value={selectedQuery}>
-      <SelectTrigger className="input">
-        <SelectValue placeholder="Select the voice" />
+    <Select onValueChange={setSubject} value={subject}>
+      <SelectTrigger className="input capitalize">
+        <SelectValue placeholder="Subject" />
       </SelectTrigger>
       <SelectContent>
+        <SelectItem value={"all"}>All subjects</SelectItem>
         {subjects.map((subject) => (
           <SelectItem value={subject} key={subject}>
             {subject}
