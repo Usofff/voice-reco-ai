@@ -143,8 +143,8 @@ export default function CompanionForm() {
                     <SelectValue placeholder="Select the voice" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={"Male"}>Male</SelectItem>
-                    <SelectItem value={"Female"}>Female</SelectItem>
+                    <SelectItem value={"male"}>Male</SelectItem>
+                    <SelectItem value={"female"}>Female</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
